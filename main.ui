@@ -6,21 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>155</width>
-    <height>262</height>
+    <width>152</width>
+    <height>245</height>
    </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>155</width>
-    <height>262</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>155</width>
-    <height>262</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>Hoi4 TagSwitch</string>
@@ -32,7 +20,7 @@
       <x>10</x>
       <y>110</y>
       <width>131</width>
-      <height>131</height>
+      <height>111</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -54,13 +42,6 @@
       <widget class="QCheckBox" name="DebugBox">
        <property name="text">
         <string>Debug</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="TPBox">
-       <property name="text">
-        <string>TP</string>
        </property>
       </widget>
      </item>
