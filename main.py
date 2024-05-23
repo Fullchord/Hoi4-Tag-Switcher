@@ -50,6 +50,7 @@ class HoI4Window(QMainWindow):
         self.OpenTutorialButton = self.findChild(QPushButton, "OpenTutorialButton")
         self.AllowTraitsBox = self.findChild(QCheckBox, "AllowTraitsBox")
         self.FOWBox = self.findChild(QCheckBox, "FOWBox")
+        self.DebugBox = self.findChild(QCheckBox, "DebugBox")
 
         # Center Label
         self.ConnectedLable.setAlignment(QtCore.Qt.AlignCenter)
@@ -73,8 +74,10 @@ class HoI4Window(QMainWindow):
             self.TagButton.clicked.connect(self.writeTagBox)  # Connect the TagButton click signal to the writeTagBox method
             self.FOWBox.stateChanged.connect(self.handleFOWBoxChange)  # Connect the FOWBox stateChanged signal
             self.AllowTraitsBox.stateChanged.connect(self.handleAllowTraitsBoxChange)  # Connect the AllowTraitsBox stateChanged signal
+            self.DebugBox.stateChanged.connect(self.handleDebugBoxChange)  # Connect the DebugBox stateChanged signal
             self.updateFOWBox()  # Update the FOWBox with the current value from memory
             self.updateAllowTraitsBox()  # Update the AllowTraitsBox with the current value from memory
+            self.updateDebugBox()  # Update the DebugBox with the current value from memory
             self.updateTagBox()  # Update the TagBox with the current value from memory
         except Exception as e:
             self.ConnectedLable.setText("Hoi4 - Not Connected")
@@ -85,10 +88,9 @@ class HoI4Window(QMainWindow):
     def setBaseAddresses(self):
         # Initialize Memory Addresses
         self.baseAddrFOW = self.pm.base_address + 0x2AB4DDA
-        # print(f"FOW Address {self.baseAddrFOW:x}")
         self.baseAddrAT = self.pm.base_address + 0x2AB4DB8
         self.baseAddrTS = self.pm.base_address + 0x2C917B0
-        # print(f"Base TAG Address {self.baseAddrTS:x}")
+        self.baseAddrDbg = self.pm.base_address + 0x2C9128C
         self.TSOffset = [0x4B0]
 
     def setButtonsStatus(self):
@@ -96,22 +98,20 @@ class HoI4Window(QMainWindow):
             self.ConnectButton.setEnabled(False)
             self.AllowTraitsBox.setEnabled(True)
             self.FOWBox.setEnabled(True)
+            self.DebugBox.setEnabled(True)
             self.TagButton.setEnabled(True)
             self.TagBox.setEnabled(True)
         else:
             self.ConnectButton.setEnabled(True)
             self.AllowTraitsBox.setEnabled(False)
             self.FOWBox.setEnabled(False)
+            self.DebugBox.setEnabled(False)
             self.TagButton.setEnabled(False)
             self.TagBox.setEnabled(False)
 
     def updateTagBox(self):
         if self.connected:
             targetAddrTS = MemoryUtils.OffsetCalculator(self.pm, self.baseAddrTS, self.TSOffset)
-            # print(f"Base Address {self.pm.base_address:x}")
-            # print(f"Offset Address {self.TSOffset[0]:x}")
-            # print(f"Base TS Address {self.baseAddrTS:x}")
-            # print(f"TS Address {targetAddrTS:x}")
             tag_value_bytes = self.pm.read_bytes(targetAddrTS, 4)  # Read 4 bytes
             tag_value = int.from_bytes(tag_value_bytes, byteorder='little')
             self.TagBox.setValue(tag_value)
@@ -135,6 +135,12 @@ class HoI4Window(QMainWindow):
             at_value = int.from_bytes(at_value_bytes, byteorder='little')
             self.AllowTraitsBox.setChecked(at_value == 1)
 
+    def updateDebugBox(self):
+        if self.connected:
+            dbg_value_bytes = self.pm.read_bytes(self.baseAddrDbg, 1)  # Read 1 byte
+            dbg_value = int.from_bytes(dbg_value_bytes, byteorder='little')
+            self.DebugBox.setChecked(dbg_value == 1)
+
     def handleFOWBoxChange(self, state):
         if self.connected:
             fow_value = 1 if state == QtCore.Qt.Checked else 0
@@ -144,6 +150,11 @@ class HoI4Window(QMainWindow):
         if self.connected:
             at_value = 1 if state == QtCore.Qt.Checked else 0
             self.pm.write_bytes(self.baseAddrAT, at_value.to_bytes(1, byteorder='little'), 1)
+
+    def handleDebugBoxChange(self, state):
+        if self.connected:
+            dbg_value = 1 if state == QtCore.Qt.Checked else 0
+            self.pm.write_bytes(self.baseAddrDbg, dbg_value.to_bytes(1, byteorder='little'), 1)
 
     def openTutorial(self):
         QDesktopServices.openUrl(QUrl.fromLocalFile(resource_path('tutorial.txt')))

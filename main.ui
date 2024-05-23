@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>152</width>
-    <height>215</height>
+    <height>245</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>110</y>
       <width>131</width>
-      <height>81</height>
+      <height>111</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -35,6 +35,13 @@
       <widget class="QCheckBox" name="AllowTraitsBox">
        <property name="text">
         <string>Allow Traits</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="DebugBox">
+       <property name="text">
+        <string>Debug</string>
        </property>
       </widget>
      </item>
