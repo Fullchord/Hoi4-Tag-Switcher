@@ -87,11 +87,11 @@ class HoI4Window(QMainWindow):
 
     def setBaseAddresses(self):
         # Initialize Memory Addresses
-        self.baseAddrFOW = self.pm.base_address + 0x2ABFDDA #FOW
-        self.baseAddrAT = self.pm.base_address + 0x2ABFDB8 #AllowTraits
-        self.baseAddrTS = self.pm.base_address + 0x2C9D340 #Tag Switch Base
-        self.baseAddrDbg = self.pm.base_address + 0x2C9CE1C #Debug
-        self.TSOffset = [0x4B0] #Tag Switch Offset
+        self.baseAddrFOW = self.pm.base_address + 0x2C20079 #FOW
+        self.baseAddrAT = self.pm.base_address + 0x2C20058 #AllowTraits
+        self.baseAddrTS = self.pm.base_address + 0x2E46A90 #Tag Switch Base
+        self.baseAddrDbg = self.pm.base_address + 0x2E4652C #Debug
+        self.TSOffset = [0x4B8] #Tag Switch Offset
 
     def setButtonsStatus(self):
         if self.connected:
